@@ -26,3 +26,14 @@ def normalize_sentence(sentence: str):
         if (pattern.search(word) is not None) and (word not in Settings.STOP_WORDS):
             result.append(word)
     return result
+
+
+def get_valid_text(lemmas: List[List[str]]):
+    result = ""
+    for sentence in lemmas:
+        current_sentence = ""
+        for word in sentence:
+            current_sentence += word + " "
+        if current_sentence != "":
+            result += current_sentence + "\n"
+    return result
