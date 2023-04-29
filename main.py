@@ -2,6 +2,7 @@ import Settings
 import Utils
 import pickle
 import os
+from nltk.tokenize import sent_tokenize
 
 if __name__ == '__main__':
     input_text = open("O Henry. Russkie sobolya.txt", "r", encoding="UTF-8")
