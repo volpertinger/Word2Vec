@@ -1,7 +1,8 @@
+import os
 import re
 import Settings
 from pymystem3 import Mystem
-from typing import List, Any
+from typing import List
 from nltk.tokenize import sent_tokenize
 
 
@@ -37,3 +38,16 @@ def get_valid_text(lemmas: List[List[str]]):
         if current_sentence != "":
             result += current_sentence + "\n"
     return result
+
+
+def write_valid_text(lemmas: List[List[str]], path: str):
+    # clear file
+    open(path, 'w').close()
+    file = open(path, 'w', encoding=Settings.PLAIN_ENCODING)
+    for sentence in lemmas:
+        current_sentence = ""
+        for word in sentence:
+            current_sentence += word + " "
+        if current_sentence != "":
+            file.write(current_sentence + "\n")
+    return

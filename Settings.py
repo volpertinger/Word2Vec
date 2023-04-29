@@ -14,6 +14,9 @@ SG = 0
 
 LEMMAS = "lemmas_save"
 MODEL = "model_save"
+PLAIN_INPUT = "O Henry. Russkie sobolya.txt"
+PLAIN_ENCODING = "UTF-8"
+NORMALIZED_TEXT = "normalized_text.txt"
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Text preprocessing
