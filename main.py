@@ -52,7 +52,20 @@ if __name__ == '__main__':
     # ------------------------------------------------------------------------------------------------------------------
     # Plot examples
     # ------------------------------------------------------------------------------------------------------------------
-    vectors = np.asarray(model_w2v.wv.vectors)
-    labels = np.asarray(model_w2v.wv.index_to_key)
-    x_vals, y_vals = Utils.reduce_dimensions(vectors)
-    Utils.plot_with_matplotlib(x_vals, y_vals, labels)
+    if Settings.WITH_PLOTS:
+        vectors = np.asarray(model_w2v.wv.vectors)
+        labels = np.asarray(model_w2v.wv.index_to_key)
+        x_vals, y_vals = Utils.reduce_dimensions(vectors)
+        Utils.plot_with_matplotlib(x_vals, y_vals, labels)
+
+    # ------------------------------------------------------------------------------------------------------------------
+    # Word tests
+    # ------------------------------------------------------------------------------------------------------------------
+    while True:
+        inp = input(f"\nType word for test\n")
+        if inp == "":
+            break
+        try:
+            print(f"similar by input: {model_w2v.wv.similar_by_word(inp)}")
+        except:
+            print(f"Wrong value {inp}")
