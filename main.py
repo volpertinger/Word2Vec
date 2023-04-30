@@ -55,4 +55,4 @@ if __name__ == '__main__':
     vectors = np.asarray(model_w2v.wv.vectors)
     labels = np.asarray(model_w2v.wv.index_to_key)
     x_vals, y_vals = Utils.reduce_dimensions(vectors)
-    Utils.plot_with_matplotlib(x_vals, y_vals, labels, 34)
+    Utils.plot_with_matplotlib(x_vals, y_vals, labels)
