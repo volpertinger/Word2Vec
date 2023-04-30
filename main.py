@@ -17,14 +17,23 @@ if __name__ == '__main__':
         lemmas = Utils.lemmatize(input_text.readlines())
         pickle.dump(lemmas, file)
         file.close()
-    print(lemmas)
 
     # if normalized txt doesn't exist
     if not os.path.isfile(Settings.NORMALIZED_TEXT):
         Utils.write_valid_text(lemmas, Settings.NORMALIZED_TEXT)
 
-    data = gensim.models.word2vec.LineSentence(Settings.NORMALIZED_TEXT)
-    model = gensim.models.Word2Vec(data, window=10, min_count=2, sg=0)
-    model.init_sims(replace=True)
-    print(len(model.wv.vocab))
-    model.save('my.model')
+    # if model doesn't exist
+    if not os.path.isfile(Settings.MODEL):
+        data = gensim.models.word2vec.LineSentence(Settings.NORMALIZED_TEXT)
+        model = gensim.models.Word2Vec(data,
+                                       window=Settings.WINDOW,
+                                       min_count=Settings.MIN_COUNT,
+                                       sg=Settings.SG,
+                                       alpha=Settings.ALPHA)
+        model.build_vocab(data)
+        model.train(data, total_examples=model.corpus_count, epochs=Settings.EPOCHS, report_delay=Settings.REPORT_DELAY)
+        model.save(Settings.MODEL)
+    else:
+        model = gensim.models.Word2Vec.load(Settings.MODEL)
+    print(model.predict_output_word(["парень", "оружие"]))
+    # print(model.wv.most_similar(positive=["сапог", "любовь"]))
