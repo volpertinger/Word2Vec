@@ -1,9 +1,12 @@
-import os
 import re
 import Settings
+import random
+import numpy as np
+import matplotlib.pyplot as plt
 from pymystem3 import Mystem
 from typing import List
 from nltk.tokenize import sent_tokenize
+from sklearn.manifold import TSNE
 
 
 # text processing to lemmas - sentences
@@ -51,3 +54,29 @@ def write_valid_text(lemmas: List[List[str]], path: str):
         if current_sentence != "":
             file.write(current_sentence + "\n")
     return
+
+
+def reduce_dimensions(vectors):
+    num_dimensions = 2  # final num dimensions (2D, 3D, etc)
+
+    # reduce using t-SNE
+    tsne = TSNE(n_components=num_dimensions, random_state=0)
+    vectors = tsne.fit_transform(vectors)
+
+    x_vals = [v[0] for v in vectors]
+    y_vals = [v[1] for v in vectors]
+    return x_vals, y_vals
+
+
+def plot_with_matplotlib(x_vals, y_vals, labels, seed=1):
+    random.seed()
+
+    plt.figure(figsize=Settings.FIGURE_SIZE)
+    plt.scatter(x_vals, y_vals)
+
+    # Label randomly sampled 25 data points
+    indices = list(range(len(labels)))
+    selected_indices = random.sample(indices, Settings.RANDOM_INDICES)
+    for i in selected_indices:
+        plt.annotate(labels[i], (x_vals[i], y_vals[i]))
+    plt.show()

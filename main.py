@@ -3,8 +3,13 @@ import Utils
 import pickle
 import os
 import gensim
+import numpy as np
 
 if __name__ == '__main__':
+
+    # ------------------------------------------------------------------------------------------------------------------
+    # Text preprocessing
+    # ------------------------------------------------------------------------------------------------------------------
     input_text = open(Settings.PLAIN_INPUT, "r", encoding=Settings.PLAIN_ENCODING)
 
     # get lemmas - from file or generating if file doesn't exist
@@ -18,22 +23,36 @@ if __name__ == '__main__':
         pickle.dump(lemmas, file)
         file.close()
 
-    # if normalized txt doesn't exist
+    # if normalized text doesn't exist
     if not os.path.isfile(Settings.NORMALIZED_TEXT):
         Utils.write_valid_text(lemmas, Settings.NORMALIZED_TEXT)
 
-    # if model doesn't exist
-    if not os.path.isfile(Settings.MODEL):
+    # ------------------------------------------------------------------------------------------------------------------
+    # Word2Vec model
+    # ------------------------------------------------------------------------------------------------------------------
+
+    # if w2v model doesn't exist
+    if not os.path.isfile(Settings.MODEL_W2V):
         data = gensim.models.word2vec.LineSentence(Settings.NORMALIZED_TEXT)
-        model = gensim.models.Word2Vec(data,
-                                       window=Settings.WINDOW,
-                                       min_count=Settings.MIN_COUNT,
-                                       sg=Settings.SG,
-                                       alpha=Settings.ALPHA)
-        model.build_vocab(data)
-        model.train(data, total_examples=model.corpus_count, epochs=Settings.EPOCHS, report_delay=Settings.REPORT_DELAY)
-        model.save(Settings.MODEL)
+        model_w2v = gensim.models.Word2Vec(data,
+                                           window=Settings.WINDOW,
+                                           min_count=Settings.MIN_COUNT,
+                                           sg=Settings.SG,
+                                           alpha=Settings.ALPHA,
+                                           compute_loss=Settings.COMPUTE_LOSS,
+                                           epochs=Settings.EPOCHS_W2V,
+                                           vector_size=Settings.SIZE)
+        model_w2v.build_vocab(data)
+        model_w2v.train(data, total_examples=model_w2v.corpus_count, epochs=Settings.EPOCHS_W2V,
+                        report_delay=Settings.REPORT_DELAY)
+        model_w2v.save(Settings.MODEL_W2V)
     else:
-        model = gensim.models.Word2Vec.load(Settings.MODEL)
-    print(model.predict_output_word(["парень", "оружие"]))
-    # print(model.wv.most_similar(positive=["сапог", "любовь"]))
+        model_w2v = gensim.models.Word2Vec.load(Settings.MODEL_W2V)
+
+    # ------------------------------------------------------------------------------------------------------------------
+    # Plot examples
+    # ------------------------------------------------------------------------------------------------------------------
+    vectors = np.asarray(model_w2v.wv.vectors)
+    labels = np.asarray(model_w2v.wv.index_to_key)
+    x_vals, y_vals = Utils.reduce_dimensions(vectors)
+    Utils.plot_with_matplotlib(x_vals, y_vals, labels, 34)

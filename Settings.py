@@ -1,11 +1,12 @@
 from nltk.corpus import stopwords
 
 # ----------------------------------------------------------------------------------------------------------------------
-# Model train
+# Word2Vec Model train
 # ----------------------------------------------------------------------------------------------------------------------
-EPOCHS = 30
+EPOCHS_W2V = 500
 REPORT_DELAY = 1
 REPLACE = True
+COMPUTE_LOSS = True
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Word2Vec
@@ -21,7 +22,7 @@ ALPHA = 0.03
 # ----------------------------------------------------------------------------------------------------------------------
 
 LEMMAS = "Saves/lemmas_save"
-MODEL = "Saves/model_save"
+MODEL_W2V = "Saves/model_w2v_save"
 PLAIN_INPUT = "Text/Im Westen nichts Neues.txt"
 PLAIN_ENCODING = "UTF-8"
 NORMALIZED_TEXT = "Text/normalized_text.txt"
@@ -32,3 +33,9 @@ NORMALIZED_TEXT = "Text/normalized_text.txt"
 LEMMA_REGEX = "^[a-zA-Zа-яА-ЯёЁ]+$"
 LANGUAGE = "russian"
 STOP_WORDS = stopwords.words(LANGUAGE)
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Plots
+# ----------------------------------------------------------------------------------------------------------------------
+FIGURE_SIZE = (15, 15)
+RANDOM_INDICES = 100
